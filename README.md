@@ -41,3 +41,40 @@ class Peta:
         distances = {city: float('inf') for city in self.daftarKota}
         distances[source] = 0
         priority_queue = [(0, source)]
+          
+        while priority_queue:
+            current_distance, current_city = heapq.heappop(priority_queue)
+            
+            if current_distance > distances[current_city]:
+                continue
+            
+            for neighbor, weight in self.daftarKota[current_city].items():
+                distance = current_distance + weight
+                if distance < distances[neighbor]:
+                    distances[neighbor] = distance
+                    heapq.heappush(priority_queue, (distance, neighbor))
+        
+        return distances
+    
+    # Metode ruteTempuh untuk menampilkan jarak tempuh dari kota1 ke kota2
+    def ruteTempuh(self, kota1, kota2):
+        if kota1 not in self.daftarKota or kota2 not in self.daftarKota:
+            print("Kamu harus memasukkan sesuai daftar kota")
+            return
+
+        distances = self.dijkstra(kota1)
+        if distances[kota2] == float('inf'):
+            print(f"Tidak ada rute dari {kota1} ke {kota2}")
+        else:
+            print(f"Jarak terpendek dari {kota1} ke {kota2} adalah {distances[kota2]} km")
+
+
+# Variabel untuk daftar nama kota di peta Jawa Timur
+KotaJawaTimur = ["Surabaya", "Sidoarjo", "Malang", "Blitar", "Tulungagung", "Trenggalek", "Ponorogo", "Madiun", "Ngawi", "Bojonegoro"]
+
+# Variabel untuk memanggil kelas Peta
+JawaTimur = Peta()
+
+# Memasukkan nama kota ke dalam kelas
+for kota in KotaJawaTimur:
+    JawaTimur.tambahKota(kota)
